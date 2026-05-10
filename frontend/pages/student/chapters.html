@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>章节选择</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+<body>
+<div class="container">
+    <div class="tab-nav">
+        <a href="#" onclick="goBackToCourses();return false;" class="active">返回课程</a>
+    </div>
+    <!-- Removed visible '章节加载中...' text. Keep hidden placeholder for compatibility -->
+    <div class="course-card" id="chapterPlaceholder" style="display:none;"></div>
+    <div class="course-list" id="chapterList"></div>
+</div>
+
+<script src="../../js/getData.js"></script>
+<script src="../../js/login.js"></script>
+<script src="../../js/student/chapters.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+/* Simple styles for the quiz page */
+*{box-sizing:border-box}
+body{font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;color:#222;margin:0;padding:20px}
+.quiz-container{max-width:760px;margin:24px auto;background:transparent}
+.quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.quiz-header h1{font-size:20px;margin:0}
+.question-card{background:#ffffff;padding:18px;border-radius:8px;box-shadow:0 6px 18px rgba(22,33,62,0.08)}
+.question-stem{font-size:18px;margin-bottom:14px}
+.options{display:flex;flex-direction:column;gap:8px}
+.option{display:flex;align-items:center;border:1px solid #e6ecff;padding:10px 12px;border-radius:8px;cursor:pointer;background:#fff}
+.option input{margin-right:12px}
+.option.selected{background:#eaf2ff;border-color:#2d7ef7}
+.quiz-nav{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+.btn{padding:8px 14px;border-radius:6px;border:1px solid #ddd;background:#fff;cursor:pointer}
+.btn.primary{background:#2d7ef7;color:#fff;border-color:#2d7ef7}
+.result-panel{margin-top:16px;background:#fff;padding:16px;border-radius:8px}
+.result-panel h2{margin-top:0}
+@media (max-width:520px){.quiz-container{padding:0 10px}.question-stem{font-size:16px}}
+

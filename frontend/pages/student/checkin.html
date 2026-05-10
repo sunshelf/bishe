@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>学生签到</title>
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; padding:20px; background:#f7f8fb }
+    .card { max-width:560px; margin:0 auto; background:#fff; padding:18px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.06) }
+    label { display:block; margin-top:8px; font-weight:600 }
+    input, select { width:100%; padding:8px 10px; margin-top:6px; box-sizing:border-box; border:1px solid #e6e6e6; border-radius:6px }
+    button { margin-top:12px; padding:10px 12px; border-radius:6px; border:none; background:#2d8cf0; color:#fff; cursor:pointer }
+    .list { margin-top:14px }
+    .item { padding:10px; border-radius:6px; background:#fff; border:1px solid #f0f0f0; margin-bottom:8px }
+    .muted { color:#666; font-size:13px }
+    .session { margin-top:12px; padding:12px; background:#f8fbff; border:1px solid #dbeafe; border-radius:8px }
+    .exit-btn { position: absolute; right: 24px; top: 18px; background: transparent; border: none; color: #334155; cursor: pointer; padding:6px; border-radius:6px }
+    .exit-btn:hover { background:#f1f5f9 }
+    .page-wrap { position: relative }
+  </style>
+</head>
+<body>
+  <div class="card page-wrap">
+    <button id="exitBtn" class="exit-btn" aria-label="退出" title="返回">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <h2>课程签到</h2>
+    <label for="courseSelect">选择课程</label>
+    <select id="courseSelect"></select>
+
+    <div id="sessionBox" class="session" style="display:none"></div>
+
+    <label for="code">输入签到口令</label>
+    <input id="code" placeholder="请输入口令" />
+    <button id="joinBtn">签到</button>
+
+    <div class="list">
+      <div class="muted">当前课程的正在进行签到</div>
+      <div id="history"></div>
+    </div>
+  </div>
+
+  <!-- shared dependencies -->
+  <script src="../../js/login.js"></script>
+  <script src="../../js/getData.js"></script>
+  <script src="../../js/student/checkin.js"></script>
+  <script>
+    document.getElementById('exitBtn')?.addEventListener('click', ()=>{
+      try{ history.back(); }catch(e){ window.location.href = '../student/dashboard.html'; }
+    });
+  </script>
+</body>
+</html>

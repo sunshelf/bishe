@@ -1,0 +1,416 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+body {
+    background-color: #f8f9fa;
+    padding: 10px;
+}
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+}
+.header h2 {
+    color: #333;
+    font-size: 18px;
+}
+.header .search {
+    display: flex;
+    width: 60%;
+}
+.header .search input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px 0 0 6px;
+    font-size: 14px;
+}
+.header .search button {
+    padding: 8px 12px;
+    background-color: #666;
+    color: white;
+    border: none;
+    border-radius: 0 6px 6px 0;
+    font-size: 14px;
+    cursor: pointer;
+}
+.tab-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+.tab-nav a {
+    padding: 10px 15px;
+    color: #666;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: color 0.3s, border-color 0.3s;
+    white-space: nowrap;
+}
+.tab-nav a.active {
+    color: #333;
+    border-bottom: 2px solid #666;
+}
+.course-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+}
+.course-card {
+    padding: 15px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    position: relative;
+}
+.course-card img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border-radius: 6px;
+}
+.course-card h3 {
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+.course-card p {
+    color: #666;
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+.course-card .meta {
+    display: flex;
+    justify-content: space-between;
+    color: #999;
+    font-size: 12px;
+}
+.course-card .actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+/* layout: avatar at left, name/college to the right */
+.topbar-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.topbar-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.05;
+}
+.topbar-name {
+    font-weight: 700;
+    color: #213547;
+}
+.topbar-college {
+    font-size: 12px;
+    color: #66788a;
+}
+.topbar-inner {
+    max-width: 400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* align children from left so avatar is visible */
+    padding: 10px 12px;
+    gap: 12px;
+}
+.topbar-inner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.topbar .user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.topbar .user-info img {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+.topbar .user-meta p {
+    font-weight: 600;
+}
+.topbar .nav-links {
+    display: flex;
+    gap: 10px;
+    list-style: none;
+}
+.topbar .nav-links li {
+    display: inline;
+}
+.topbar .nav-links .tab-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.topbar .nav-links .tab-btn:hover {
+    background: #f1f5f9;
+}
+.topbar .logout-wrapper {
+    margin-left: 8px;
+}
+.topbar-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-end;
+    margin-left: auto;
+}
+
+/* Icon button used in topbar for chat/logout */
+.icon-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:40px;
+    height:40px;
+    border-radius:8px;
+    background:transparent;
+    border:1px solid transparent;
+    color: #334155;
+    cursor:pointer;
+    transition:background .12s ease, transform .08s ease, box-shadow .12s ease;
+}
+.icon-btn svg{ width:18px; height:18px; display:block; fill:currentColor; stroke:currentColor; }
+.icon-btn:hover{ background:#f1f5f9; transform:translateY(-2px); }
+.icon-btn.logout-icon{ color:#ef4444; }
+.icon-btn.logout-icon:hover{ background: rgba(239,68,68,0.06); }
+/* Report styles for student dashboard */
+.report-card {
+    background: #ffffff;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(22,33,62,0.06);
+    /* make the report card span the full width of its container (coursesCountainDiv) */
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+}
+.report-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    background: linear-gradient(180deg,#2d7ef7,#3aa0ff);
+    opacity: 0.06;
+}
+.report-card h3 {
+    margin: 0 0 12px 0;
+    font-size: 18px;
+    color: #213547;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.report-card h3::after {
+    content: '';
+    flex: 1 1 auto;
+    height: 1px;
+    background: linear-gradient(90deg,transparent,#eef2f6,transparent);
+    margin-left: 8px;
+}
+.report-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 14px;
+}
+.report-summary p {
+    background: #f6f8ff;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin: 0;
+    font-size: 13px;
+    color: #3b4b5a;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.report-summary p strong {
+    display: block;
+    margin-top: 6px;
+    font-size: 16px;
+    color: #2d7ef7;
+}
+.report-list h4 {
+    margin: 8px 0;
+    font-size: 15px;
+}
+.report-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+}
+.report-list li {
+    background: #fff;
+    border: 1px solid #eef2f6;
+    padding: 10px 12px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: #2d3b45;
+    transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+.report-list li:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(35,63,95,0.06);
+    border-color: #e6f0ff;
+}
+.report-list li strong {
+    font-weight: 600;
+}
+.badge {
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+.badge.pass {
+    background: #e8f7ee;
+    color: #0a8f4a;
+}
+.badge.fail {
+    background: #fff2f2;
+    color: #c0392b;
+}
+.score-overview {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+.score-bar {
+    background: #eef6ff;
+    border-radius: 8px;
+    width: 140px;
+    height: 10px;
+    overflow: hidden;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.04);
+}
+.score-fill {
+    background: linear-gradient(90deg,#2d7ef7,#3aa0ff);
+    height: 100%;
+    width: 0;
+    transition: width 600ms cubic-bezier(.2,.9,.2,1);
+    box-shadow: inset 0 -1px 0 rgba(255,255,255,0.08);
+}
+.avg-num {
+    font-size: 13px;
+    color: #3b4b5a;
+    min-width: 36px;
+}
+.course-name {
+    font-weight: 600;
+}
+.course-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.score-text {
+    color: #556;
+    font-weight: 600;
+    min-width: 36px;
+    text-align: right;
+}
+.badge.pending {
+    background: #f0f4f8;
+    color: #697b8a;
+}
+/* When report-card is rendered inside the course-list, make it exactly match the container width */
+.course-list > .report-card {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+}
+/* small adjustments for very small screens */
+@media (max-width: 420px) {
+    .report-summary p {
+        padding: 8px;
+    }
+    .report-list li {
+        padding: 8px;
+    }
+    .icon-action {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+    }
+    .icon-action svg {
+        width: 18px;
+        height: 18px;
+    }
+    .course-card .actions {
+        gap: 6px;
+    }
+}
+@media (max-width: 720px) {
+    .report-card {
+        padding: 12px;
+    }
+    .report-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .topbar-inner {
+        padding: 8px;
+    }
+    .topbar .user-meta span {
+        display: none;
+    }
+    .topbar .nav-links {
+        gap: 6px;
+    }
+    .header .search {
+        display: none;
+    }
+}
+@media (max-width: 520px) {
+    .score-bar {
+        width: 100px;
+        height: 8px;
+    }
+    .report-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .report-list li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+    .course-meta {
+        width: 100%;
+        justify-content: space-between;
+    }
+}

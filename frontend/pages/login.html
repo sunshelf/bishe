@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>登录</title>
+    <link rel="stylesheet" href="css/login.css" />
+    <script src="../js/getData.js"></script>
+    <script src="../js/login.js" defer></script>
+
+</head>
+<body>
+<main class="login-container">
+    <h1 class="login-title">用户登录</h1>
+    <form action="#" method="post" id="loginForm">
+        <div class="form-item">
+            <!-- 添加 id 以便 JS 获取 -->
+            <input type="text" name="username" id="username" placeholder="用户名" required />
+        </div>
+        <div class="form-item">
+            <!-- 添加 id 以便 JS 获取 -->
+            <input type="password" name="password" id="password" placeholder="密码" required />
+        </div>
+
+        <!-- 角色选择：每项单独一行 -->
+        <!-- File: `frontend/pages/login.html`（替换原有角色选择部分） -->
+        <div class="form-item">
+            <div class="role-options">
+                <label>
+                    <input type="radio" name="role" value="student" id="roleStudent" checked />
+                    学生
+                </label>
+                <label>
+                    <input type="radio" name="role" value="teacher" id="roleTeacher" />
+                    教师
+                </label>
+            </div>
+        </div>
+
+
+        <!-- 改为 submit，这样按 Enter 也会触发表单提交 -->
+        <button class="login-btn" type="submit">登录</button>
+    </form>
+</main>
+</body>
+</html>

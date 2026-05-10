@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>管理员面板</title>
+  <style>
+    :root{
+      --bg: #f4f6fb;
+      --card: #ffffff;
+      --muted: #6b7280;
+      --accent: #2563eb;
+      --soft: #eef2f7;
+      --text: #0f172a;
+    }
+    html,body{height:100%;}
+    body{font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:20px; background:var(--bg); color:var(--text);}
+    .wrap{max-width:1100px;margin:0 auto;padding:8px}
+    .card{background:var(--card);border-radius:12px;padding:20px;box-shadow:0 10px 30px rgba(15,23,42,0.06);margin-bottom:20px;border:1px solid rgba(15,23,42,0.03)}
+    h1{margin:0 0 8px;font-size:20px;color:var(--text);letter-spacing:0.2px}
+    .cols{display:flex;gap:18px}
+    .col{flex:1}
+    label{display:block;margin-bottom:8px;font-weight:600;color:#111827}
+    input[type=text],select{width:100%;padding:10px;border:1px solid #e6eef8;border-radius:8px;margin-bottom:10px;background:#fbfdff}
+    button{padding:8px 12px;border-radius:8px;border:0;background:var(--accent);color:#fff;cursor:pointer;font-weight:600}
+    .btn-ghost{background:#fff;border:1px solid #e6eef8;color:var(--text);padding:8px 10px;border-radius:8px}
+    .btn-ghost:hover{box-shadow:0 6px 18px rgba(37,99,235,0.08)}
+    .result{margin-top:12px}
+    .table-wrap{border-radius:10px;overflow:hidden;border:1px solid var(--soft);box-shadow:0 6px 18px rgba(2,6,23,0.03)}
+    table{width:100%;border-collapse:collapse;background:transparent}
+    thead th{padding:12px 14px;text-align:left;background:linear-gradient(180deg,#fbfdff,#f8fafc);font-weight:700;color:#334155;border-bottom:1px solid #eef4fb}
+    tbody td{padding:12px 14px;border-bottom:1px solid #f1f5f9;color:var(--text)}
+    tbody tr:nth-child(even){background:#fbfdff}
+    tbody tr:hover{background:#f1f5f9}
+    tbody tr.selected{background:#eef4ff}
+    .small{font-size:13px;color:var(--muted)}
+    .muted{color:var(--muted)}
+    .tabs{display:flex;gap:8px;margin-bottom:14px}
+    .tab{padding:8px 14px;border-radius:999px;background:transparent;border:1px solid transparent;color:#475569;cursor:pointer}
+    .tab.active{background:linear-gradient(90deg,var(--accent),#1e40af);color:white;box-shadow:0 8px 18px rgba(37,99,235,0.12)}
+    .note{font-size:13px;color:#475569;margin-top:12px}
+
+    /* simple icon button for logout */
+    .icon-btn{background:transparent;border:0;padding:6px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:#374151}
+    .icon-btn svg{width:18px;height:18px}
+    .icon-btn:hover{background:#f1f5f9}
+    .icon-btn.logout-icon{color:#b91c1c}
+
+    /* responsive */
+    @media (max-width:900px){
+      .cols{flex-direction:column}
+      thead th:nth-child(4), tbody td:nth-child(4){display:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div class="tabs" id="tabs">
+          <div class="tab active" data-tab="roles">查看用户</div>
+          <div class="tab" data-tab="courses">查看课程</div>
+          <div class="tab" data-tab="add">新增用户</div>
+          <div class="tab" data-tab="manage">课程管理</div>
+        </div>
+        <div>
+          <button id="adminLogoutBtn" class="icon-btn logout-icon" aria-label="返回" title="返回上级">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+      <div id="panes">
+        <div class="pane" id="pane-roles">
+          <div class="cols">
+            <div class="col">
+              <div style="overflow:auto;max-height:360px">
+                <div class="table-wrap">
+                  <table id="usersTable" style="width:100%;border-collapse:collapse">
+                    <thead>
+                      <tr>
+                        <th data-key="id" style="cursor:pointer">ID ▾</th>
+                        <th data-key="name" style="cursor:pointer">姓名</th>
+                        <th data-key="role" style="cursor:pointer">角色</th>
+                        <th data-key="college" style="cursor:pointer">学院</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td colspan="4" class="muted small">加载中…</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div style="display:flex;gap:8px;margin-top:8px">
+                <button id="btnRefreshUsers" class="btn-ghost">刷新列表</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pane" id="pane-courses" style="display:none">
+          <div class="cols">
+            <div class="col">
+              <div style="overflow:auto;max-height:420px">
+                <div class="table-wrap">
+                  <table id="coursesTable" style="width:100%;border-collapse:collapse">
+                    <thead>
+                      <tr>
+                        <th data-key="id" style="cursor:pointer">ID ▾</th>
+                        <th data-key="name" style="cursor:pointer">课程名</th>
+                        <th data-key="college" style="cursor:pointer">学院</th>
+                        <th data-key="credits" style="cursor:pointer">学分</th>
+                        <th data-key="startTime" style="cursor:pointer">开始时间</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td colspan="5" class="muted small">加载中…</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pane" id="pane-add" style="display:none">
+          <div class="cols">
+            <div class="col">
+              <label for="studentName">新增学生</label>
+              <input id="studentName" type="text" placeholder="姓名" />
+              <input id="studentCollege" type="text" placeholder="学院" />
+              <input id="studentGrade" type="text" placeholder="年级" />
+              <input id="studentAvatar" type="text" placeholder="头像 URL" />
+              <input id="studentPassword" type="text" placeholder="密码" />
+              <div style="display:flex;gap:8px;margin-bottom:8px">
+                <button id="btnAddStudent">新增学生</button>
+              </div>
+            </div>
+
+            <div class="col">
+              <label for="teacherName">新增教师</label>
+              <input id="teacherName" type="text" placeholder="姓名" />
+              <input id="teacherCollege" type="text" placeholder="学院" />
+              <input id="teacherTitle" type="text" placeholder="职称（如 副教授）" />
+              <input id="teacherAvatar" type="text" placeholder="头像 URL" />
+              <input id="teacherPassword" type="text" placeholder="密码" />
+              <div style="display:flex;gap:8px;margin-top:8px">
+                <button id="btnAddTeacher">新增教师</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pane" id="pane-manage" style="display:none">
+          <!-- Inlined Course Manager -->
+          <div class="container admin-wrap" id="cm_adminWrap">
+              <div class="panel left">
+                  <h3>所有课程</h3>
+                  <div id="cm_coursesContainer">
+                      <table class="courses-table" id="cm_coursesTable">
+                          <thead>
+                              <tr><th>课程名称</th><th>学院</th></tr>
+                          </thead>
+                          <tbody id="cm_coursesBody">
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+
+              <div class="panel right">
+                  <div id="cm_courseDetailRoot">
+                      <h3 id="cm_courseTitle">请选择一个课程</h3>
+                      <div id="cm_courseMeta" class="muted"></div>
+
+                      <hr />
+                      <div id="cm_chaptersSection">
+                          <h4>章节</h4>
+                          <div id="cm_chaptersList" style="display:none"></div>
+                          <div style="margin-top:12px;">
+                              <h4>添加章节</h4>
+                              <form id="cm_addChapterForm" style="display:none">
+                                  <div class="form-row"><label class="small-label">章序号</label><input name="chapterNo" type="number" required style="width:120px;" /></div>
+                                  <div class="form-row"><label class="small-label">章节名</label><input name="name" type="text" required style="width:60%;" /></div>
+                                  <div class="form-row"><label class="small-label">视频URL</label><input name="videoUrl" type="text" style="width:60%;" /></div>
+                                  <div class="form-row"><button class="btn" type="submit">添加章节</button></div>
+                              </form>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../js/getData.js"></script>
+  <script src="../../js/admin/course_manager.js"></script>
+  <script src="../../js/admin/admin_dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>课程管理 - 管理员</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <style>
+        .admin-wrap { padding: 16px; display:flex; gap:16px; }
+        .panel { background:#fff; border-radius:8px; padding:12px; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+        .left { width: 38%; }
+        .right { flex:1; }
+        .courses-table { width:100%; border-collapse:collapse; }
+        .courses-table th, .courses-table td { padding:8px 10px; border-bottom:1px solid #eee; text-align:left; }
+        .courses-table tr:hover { background:#f6f8ff; cursor:pointer; }
+        .chapter-item { padding:10px; border:1px solid #f0f0f0; margin-bottom:8px; border-radius:6px; }
+        .small-label { display:inline-block; width:80px; color:#666; }
+        .form-row { margin:6px 0; }
+        .btn { padding:8px 12px; border-radius:6px; border:0; background:#2f6bff; color:#fff; cursor:pointer; }
+        .btn-ghost { background:transparent; border:1px solid #ddd; color:#333; }
+        .muted { color:#888; font-size:0.95em; }
+    </style>
+</head>
+<body>
+<div class="container admin-wrap">
+    <div class="panel left">
+        <h3>所有课程</h3>
+        <div id="coursesContainer">
+            <table class="courses-table" id="coursesTable">
+                <thead>
+                    <tr><th>课程名称</th><th>学院</th></tr>
+                </thead>
+                <tbody id="coursesBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="panel right">
+        <div id="courseDetailRoot">
+            <h3 id="courseTitle">请选择一个课程</h3>
+            <div id="courseMeta" class="muted"></div>
+
+            <hr />
+            <div id="chaptersSection">
+                <h4>章节</h4>
+                <div id="chaptersList"></div>
+                <div style="margin-top:12px;">
+                    <h4>添加章节</h4>
+                    <form id="addChapterForm">
+                        <div class="form-row"><label class="small-label">章序号</label><input name="chapterNo" type="number" required style="width:120px;" /></div>
+                        <div class="form-row"><label class="small-label">章节名</label><input name="name" type="text" required style="width:60%;" /></div>
+                        <div class="form-row"><label class="small-label">视频URL</label><input name="videoUrl" type="text" style="width:60%;" /></div>
+                        <div class="form-row"><button class="btn" type="submit">添加章节</button></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../js/getData.js"></script>
+<script src="../../js/login.js"></script>
+<script src="../../js/admin/course_manager.js"></script>
+</body>
+</html>

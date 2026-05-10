@@ -1,0 +1,97 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #e6f4ff, #f5faff);
+}
+.login-container {
+    width: 100%;
+    max-width: 380px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.08);
+}
+.login-title {
+    font-size: 22px;
+    margin-bottom: 16px;
+    text-align: center;
+    color: #1677ff;
+}
+.form-item { margin-bottom: 12px; }
+.form-item input {
+    width: 100%;
+    height: 40px;
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    padding: 0 12px;
+    outline: none;
+}
+.form-item input:focus { border-color: #1677ff; }
+.login-btn {
+    width: 100%;
+    height: 40px;
+    border: 0;
+    border-radius: 8px;
+    color: #fff;
+    background: #1677ff;
+    cursor: pointer;
+}
+.login-btn:hover { background: #0958d9; }
+
+.role-options {
+    display: inline-flex;
+    gap: 12px;
+    align-items: center;
+}
+.role-options label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    cursor: pointer;
+    user-select: none;
+    font-size: 1rem; /* 可按需调整，radio 大小会跟随此字体尺寸 */
+}
+
+/* 自定义 radio，使其尺寸以 em 为单位，和文字大小一致 */
+.role-options input[type="radio"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    box-sizing: border-box; /* ensure border included in width/height calculations */
+    padding: 0;
+    width: 1em; /* size tied to font-size so it matches text */
+    height: 1em;
+    display: inline-grid; /* center the inner dot reliably */
+    place-items: center;
+    border-radius: 50%;
+    border: 0.12em solid #333; /* use em units so border scales with font-size */
+    position: relative;
+    vertical-align: middle;
+    margin: 0;
+    background: transparent;
+}
+.role-options input[type="radio"]::after {
+    content: "";
+    width: 0.5em;
+    height: 0.5em;
+    background: #333;
+    border-radius: 50%;
+    transform: scale(0);
+    transition: transform .12s ease-in-out, opacity .12s;
+    opacity: 0;
+}
+.role-options input[type="radio"]:checked::after {
+    transform: scale(1);
+    opacity: 1;
+}
+.role-options input[type="radio"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.25em rgba(22,119,255,0.12);
+}
+
+/* 可选：确保表单项间距一致 */
+.form-item .role-options { width: 100%; }
