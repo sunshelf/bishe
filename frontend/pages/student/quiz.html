@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>做题 - 选择题练习</title>
+    <link rel="stylesheet" href="../css/quiz.css">
+</head>
+<body>
+<div class="quiz-container">
+    <header class="quiz-header">
+        <h1>选择题练习</h1>
+        <div class="quiz-progress" id="quizProgress">0 / 0</div>
+    </header>
+
+    <main class="quiz-main">
+        <div id="questionCard" class="question-card">
+            <!-- question will be rendered here -->
+        </div>
+
+        <nav class="quiz-nav">
+            <button id="prevBtn" class="btn" disabled>上一题</button>
+            <button id="nextBtn" class="btn">下一题</button>
+            <button id="submitBtn" class="btn primary">提交答案</button>
+            <button id="closeBtn" class="btn">关闭</button>
+        </nav>
+
+        <div id="resultPanel" class="result-panel" aria-live="polite" hidden>
+            <h2>答题结果</h2>
+            <p id="resultText"></p>
+            <button id="retakeBtn" class="btn">重新做题</button>
+        </div>
+    </main>
+</div>
+
+<script src="../../js/getData.js"></script>
+<script src="../../js/student/quiz.js"></script>
+<script src="../../js/login.js"></script>
+</body>
+</html>

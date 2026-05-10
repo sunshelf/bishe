@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>课程管理</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <script src="../../js/getData.js"></script>
+    <script src="../../js/login.js"></script>
+    <script src="../../js/teacher/teacher_dashboard.js"></script>
+    <script src="../../js/chat.js"></script>
+</head>
+<body>
+    <!-- Compact topbar -->
+    <div class="topbar">
+        <div class="topbar-inner">
+            <div class="topbar-info">
+                <img id="topbarAvatar" class="topbar-avatar" src="https://picsum.photos/id/1005/44/44" alt="avatar">
+                <div class="topbar-text">
+                    <div id="topbarName" class="topbar-name">test_teacher</div>
+                    <div id="topbarCollege" class="topbar-college">软件学院</div>
+                </div>
+            </div>
+            <div class="topbar-actions">
+                <button class="icon-btn" id="chatBtn" onclick="gotoChats()" aria-label="私聊" title="私聊">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="8" cy="11" r="1" fill="currentColor"/>
+                        <circle cx="12" cy="11" r="1" fill="currentColor"/>
+                        <circle cx="16" cy="11" r="1" fill="currentColor"/>
+                    </svg>
+                </button>
+                <button id="logoutBtn" class="icon-btn logout-icon" aria-label="退出" title="退出">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M16 17l5-5-5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M21 12H9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M13 19H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <div class="tab-nav">
+            <a href="#" class="active">我教的课</a>
+            <a href="#" onclick="gotoTeacherCheckin()">签到</a>
+        </div>
+
+        <div class="course-list">
+            <div class="course-card" data-course-id="1">
+                <img src="https://picsum.photos/id/101/300/200" alt="嵌入式系统板级电路装配">
+                <h3>嵌入式系统板级电路装配 2025-2028-1</h3>
+                <p>嵌入式系统、电路设计、硬件开发</p>
+                <div class="meta">
+                    <span>2025-09-01</span>
+                    <span>16学分</span>
+                </div>
+            </div>
+            <div class="course-card" data-course-id="2">
+                <img src="https://picsum.photos/id/102/300/200" alt="机器学习2025春">
+                <h3>机器学习2025春</h3>
+                <p>机器学习、深度学习、算法模型</p>
+                <div class="meta">
+                    <span>2025-03-01</span>
+                    <span>4学分</span>
+                </div>
+            </div>
+            <div class="course-card" data-course-id="3">
+                <img src="https://picsum.photos/id/103/300/200" alt="计算机网络A 2025 春季">
+                <h3>计算机网络A 2025 春季</h3>
+                <p>计算机网络、网络协议、网络安全</p>
+                <div class="meta">
+                    <span>2025-03-01</span>
+                    <span>4学分</span>
+                </div>
+            </div>
+            <div class="course-card" data-course-id="4">
+                <img src="https://picsum.photos/id/104/300/200" alt="FPGA微机课程设计">
+                <h3>FPGA微机课程设计-2024/2025学年第2学期</h3>
+                <p>FPGA、微机原理、硬件设计</p>
+                <div class="meta">
+                    <span>2024-09-01</span>
+                    <span>2学分</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('logoutBtn')?.addEventListener('click', function () {
+            try {
+                if (typeof clearCurrentUser === 'function') clearCurrentUser();
+            } catch (e) {
+                // ignore
+            }
+            window.location.href = '../../index.html';
+        });
+
+        function gotoTeacherCheckin(){
+            const firstCourse = document.querySelector('.course-card[data-course-id]')?.dataset?.courseId || '';
+            window.location.href = firstCourse ? `checkin.html?courseId=${encodeURIComponent(firstCourse)}` : 'checkin.html';
+        }
+
+        initTeacherDashboard()
+
+                // set topbar avatar from stored user info if available
+                document.addEventListener('DOMContentLoaded', ()=>{
+                    try{
+                        const avatar = document.getElementById('topbarAvatar');
+                        const nameEl = document.getElementById('topbarName');
+                        const collegeEl = document.getElementById('topbarCollege');
+                        if (!avatar && !nameEl && !collegeEl) return;
+                        let u = null;
+                        if (typeof getLocalUser === 'function') u = getLocalUser();
+                        if (!u && typeof getCurrentUser === 'function') u = getCurrentUser();
+                        if (u) {
+                            if (u.avatarUrl && avatar) { avatar.src = u.avatarUrl; avatar.alt = u.name || 'avatar'; }
+                            if (u.name && nameEl) nameEl.textContent = u.name;
+                            if (u.college && collegeEl) collegeEl.textContent = u.college;
+                        }
+                    }catch(e){ console.warn('set topbar info failed', e); }
+                });
+    </script>
+</body>
+</html>

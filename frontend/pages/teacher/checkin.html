@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>签到管理</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background:#f7f7f8 }
+    .container { max-width:720px; margin:0 auto; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+    h1 { font-size:20px; margin-bottom:12px }
+    .field { margin-top:10px; font-weight:600 }
+    input, select { width:100%; padding:8px 10px; margin-top:6px; box-sizing:border-box; border:1px solid #ddd; border-radius:6px }
+    .actions { margin-top:18px; display:flex; gap:10px }
+    button { padding:10px 14px; border:none; border-radius:6px; cursor:pointer }
+    button.primary { background:#2d8cf0; color:#fff }
+    button.ghost { background:#f3f4f6 }
+    .info { font-size:13px; color:#666; margin-top:8px }
+    .activeCard { margin-top:14px; padding:10px; background:#f0f9ff; border:1px solid #d2ecff; border-radius:6px }
+    .panel { margin-top:16px; }
+    .panel-title { font-weight:700; margin-bottom:10px; }
+    .hint { margin-top:8px; color:#66788a; font-size:13px; }
+    /* small exit button */
+    .exit-btn { position: absolute; right: 20px; top: 20px; background: transparent; border: none; color: #334155; cursor: pointer; padding:6px; border-radius:6px }
+    .exit-btn:hover { background:#f1f5f9 }
+    .page-wrap { position: relative }
+  </style>
+</head>
+<body>
+  <div class="container page-wrap">
+    <button id="exitBtn" class="exit-btn" aria-label="退出" title="返回">
+      <!-- simple left arrow icon -->
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+    <h1>签到管理</h1>
+
+    <div id="startPanel" class="panel">
+      <label class="field" for="courseSelect">选择课程</label>
+      <select id="courseSelect"></select>
+      <div id="courseHint" class="hint">请先选择一门你教的课程</div>
+
+      <label class="field" for="duration">签到时长（分钟）</label>
+      <input id="duration" type="number" min="1" value="5" />
+
+      <label class="field" for="passcode">签到口令（不填自动生成）</label>
+      <input id="passcode" type="text" placeholder="可留空自动生成" />
+
+      <div class="actions">
+        <button id="startBtn" class="primary">开始签到</button>
+        <button id="stopBtn" class="ghost">结束签到</button>
+      </div>
+    </div>
+
+    <div id="activePanel" class="panel" style="display:none;">
+      <div class="panel-title">签到情况</div>
+      <div id="active" class="activeCard"></div>
+    </div>
+
+    <div class="info">提示：此页面会读取你教的课程，选择后可查看当前签到状态，若没有活动签到则可直接发起。</div>
+  </div>
+
+  <!-- shared dependencies -->
+  <script src="../../js/login.js"></script>
+  <script src="../../js/getData.js"></script>
+  <script src="../../js/teacher/checkin.js"></script>
+  <script>
+    // exit button returns to previous page
+    document.getElementById('exitBtn')?.addEventListener('click', ()=>{
+      try{ history.back(); }catch(e){ window.location.href = '../teacher/dashboard.html'; }
+    });
+  </script>
+</body>
+</html>

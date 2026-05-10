@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>课程学生学习情况</title>
+  <style>
+    body{font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; margin:16px; color:#222; background:#f5f7fb}
+    .container{max-width:980px;margin:0 auto;background:#fff;border-radius:10px;padding:18px 20px;box-shadow:0 6px 18px rgba(20,30,60,0.08)}
+    h1{font-size:20px;margin-bottom:6px;color:#1f2937}
+    .meta{color:#4b5563;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .metrics{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .metric-badge{background:#eef2ff;color:#1e40af;padding:6px 10px;border-radius:999px;font-size:13px;border:1px solid rgba(30,64,175,0.08)}
+    .controls{display:flex;gap:8px;margin-bottom:12px;align-items:center}
+    .btn{padding:8px 12px;border-radius:8px;border:1px solid #d1d5db;background:#fff;cursor:pointer;color:#111;font-weight:600;font-size:14px}
+    .btn:hover{box-shadow:0 2px 6px rgba(16,24,40,0.06)}
+    .btn.primary{background:#2563eb;color:#fff;border-color:transparent}
+    .btn.ghost{background:transparent;border:1px dashed #e5e7eb;color:#374151}
+
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(16,24,40,0.03)}
+    thead th{padding:12px 14px;text-align:left;background:#f8fafc;color:#374151;font-weight:700;font-size:13px;border-bottom:1px solid #eef2f6}
+    tbody td{padding:12px 14px;border-bottom:1px solid #f1f5f9;color:#111}
+    tbody tr:nth-child(even){background:#fbfdff}
+    tbody tr:hover{background:#f1f5f9}
+    .avatar{width:48px;height:48px;border-radius:50%;overflow:hidden;display:inline-block;vertical-align:middle;background:#e6eef8;text-align:center;line-height:48px;font-weight:700;color:#fff}
+    .avatar img{width:48px;height:48px;object-fit:cover;border-radius:50%;display:block}
+    .user-cell{display:flex;gap:12px;align-items:center}
+    .user-cell .name{font-weight:600;color:#0f172a}
+    .user-cell .meta-small{font-size:13px;color:#6b7280}
+
+    .no-data{padding:32px;color:#6b7280;text-align:center}
+
+    .status-pill{display:inline-block;padding:6px 10px;border-radius:999px;font-weight:700;font-size:13px}
+    .status-done{background:#ecfdf5;color:#065f46;border:1px solid rgba(6,95,70,0.08)}
+    .status-pending{background:#f8fafc;color:#374151;border:1px solid rgba(55,65,81,0.04)}
+    .status-pass{color:#065f46}
+    .status-fail{color:#b91c1c}
+
+    /* responsive: hide less-important columns on small screens */
+    @media (max-width:760px){
+      table thead th:nth-child(2), table tbody td:nth-child(2){display:none} /* hide 学院 */
+      table thead th:nth-child(5), table tbody td:nth-child(5){display:none} /* hide 及格 */
+      .meta{flex-direction:column;align-items:flex-start}
+      .controls{width:100%;justify-content:flex-start}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>课程学生学习情况</h1>
+    <div class="meta" id="meta">
+      <div class="meta-left"><strong id="meta-title">加载中…</strong></div>
+      <div class="metrics" id="metrics" aria-hidden="false">
+        <!-- metric badges injected by JS -->
+      </div>
+    </div>
+    <div class="controls">
+      <button id="refreshBtn" class="btn">刷新</button>
+      <a id="backLink" class="btn" href="dashboard.html">返回</a>
+    </div>
+
+    <div id="content">
+      <div class="no-data">正在加载，请稍候…</div>
+    </div>
+  </div>
+
+  <script src="../../js/getData.js"></script>
+  <script src="../../js/teacher/course_students.js"></script>
+    <script src="../../js/teacher/teacher_dashboard.js"></script>
+</body>
+</html>

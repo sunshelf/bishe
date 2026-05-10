@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学习页面</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <style>
+        .learn-wrap { padding: 16px; }
+        .learn-video { width: 100%; aspect-ratio: 16 / 9; border: none; border-radius: 12px; background: #000; }
+        .question-card { margin-top: 16px; }
+        .question-item { background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+        .question-options label { display: block; margin: 8px 0; }
+        .question-actions { margin-top: 12px; }
+        .question-actions button { padding: 8px 14px; border: 0; border-radius: 8px; background: #2f6bff; color: #fff; cursor: pointer; }
+        .empty-tip { padding: 16px; background: #fff; border-radius: 12px; }
+    </style>
+    <script src="../../js/getData.js"></script>
+    <script src="../../js/login.js"></script>
+    <script src="../../js/student/learn.js"></script>
+</head>
+<body>
+<div class="container learn-wrap">
+    <div class="tab-nav">
+        <a href="#" onclick="goBackToChapters();return false;" class="active">返回章节</a>
+    </div>
+    <!-- Removed the visible '章节加载中...' text. Keep the container hidden for compatibility. -->
+    <div id="chapterInfo" class="empty-tip" style="display:none;"></div>
+    <div id="videoContainer"></div>
+    <div id="questionContainer" class="question-card"></div>
+</div>
+</body>
+</html>

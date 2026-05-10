@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>嵌入B站视频</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;background:#f6f8fb;color:#213547;padding:18px}
+    .wrap{max-width:980px;margin:18px auto;background:#fff;padding:18px;border-radius:8px;box-shadow:0 6px 20px rgba(22,33,62,0.06);position:relative}
+    h1{margin:0 0 12px;font-size:20px}
+    label{display:block;margin:8px 0 6px;font-weight:600}
+    input[type=text]{width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:6px;font-size:14px}
+    .controls{display:flex;gap:8px;margin-top:10px}
+    button{padding:10px 12px;border-radius:6px;border:none;cursor:pointer}
+    .btn-primary{background:#2d8cf0;color:#fff}
+    .btn-ghost{background:#f3f4f6}
+    .hint{margin-top:10px;color:#64748b;font-size:13px}
+
+    /* responsive iframe container */
+    .player{margin-top:18px;display:none}
+    .player .frame-wrap{position:relative;padding-top:56.25%;background:#000;border-radius:6px;overflow:hidden}
+    .player iframe{position:absolute;left:0;top:0;width:100%;height:100%;border:0}
+
+    /* exit button */
+    .exit-btn{position:absolute;right:16px;top:16px;background:transparent;border:1px solid transparent;padding:6px;border-radius:6px;cursor:pointer}
+    .exit-btn svg{width:16px;height:16px;color:#334155}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <button class="exit-btn" id="exitBtn" title="返回"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <h1>嵌入 B 站 视频</h1>
+
+    <label for="videoSrc">粘贴 Bilibili 视频链接 / BV号 / av号 / 或者 embed iframe 代码</label>
+    <input id="videoSrc" type="text" placeholder="例如：https://www.bilibili.com/video/BV1xx... 或 BV1xx... 或 av123456 或 <iframe src=...>" />
+
+    <div class="controls">
+      <button id="loadBtn" class="btn-primary">加载视频</button>
+      <button id="clearBtn" class="btn-ghost">清空</button>
+      <button id="openInNew" class="btn-ghost">新窗口打开</button>
+    </div>
+
+    <div class="hint">支持的输入示例：完整页面链接、BV号（带或不带 BV 前缀）、av号、或直接粘贴 B 站的 iframe 嵌入代码。页面会尝试解析并加载播放器。</div>
+
+    <div class="player" id="player">
+      <div class="frame-wrap" id="frameWrap">
+        <!-- iframe will be injected here -->
+      </div>
+    </div>
+
+    <div class="hint" id="debug" style="display:none;margin-top:10px;color:#9ca3af;font-size:12px"></div>
+  </div>
+
+  <script>
+    function tryExtractSrc(input){
+      if(!input) return null;
+      input = input.trim();
+      // if iframe snippet provided, extract src
+      const iframeMatch = input.match(/<iframe[^>]+src=["']([^"']+)["'][^>]*><\/iframe>/i);
+      if(iframeMatch) return iframeMatch[1];
+
+      // normalize URL
+      try{
+        // if looks like full URL
+        if(input.startsWith('http')||input.startsWith('//')){
+          const u = new URL(input, window.location.href);
+          // check if it's already a player URL (player.bilibili.com)
+          if(u.hostname.includes('player.bilibili.com')) return u.href;
+          // check for /video/ path
+          if(u.pathname && u.pathname.indexOf('/video/')>=0){
+            const seg = u.pathname.split('/video/')[1] || '';
+            const id = seg.split(/[/?#]/)[0];
+            if(id) return 'https://player.bilibili.com/player.html?bvid=' + encodeURIComponent(id) + '&page=1';
+          }
+          // query like ?bvid=BVxxx
+          const q = u.searchParams.get('bvid') || u.searchParams.get('aid');
+          if(q){
+            if(u.searchParams.get('bvid')) return 'https://player.bilibili.com/player.html?bvid=' + encodeURIComponent(q) + '&page=1';
+            if(u.searchParams.get('aid')) return 'https://player.bilibili.com/player.html?aid=' + encodeURIComponent(q) + '&page=1';
+          }
+          // fallback: return URL as-is
+          return u.href;
+        }
+      }catch(e){/* ignore */}
+
+      // plain BV or av id
+      const bv = input.match(/^(?:BV)?([A-Za-z0-9]+)/);
+      if(bv){
+        return 'https://player.bilibili.com/player.html?bvid=' + encodeURIComponent(bv[0]) + '&page=1';
+      }
+      const av = input.match(/^(?:av)?(\d+)$/i);
+      if(av){
+        return 'https://player.bilibili.com/player.html?aid=' + encodeURIComponent(av[1]) + '&page=1';
+      }
+      return null;
+    }
+
+    function loadPlayer(src){
+      const player = document.getElementById('player');
+      const frameWrap = document.getElementById('frameWrap');
+      frameWrap.innerHTML = '';
+      if(!src){ player.style.display='none'; return; }
+      const iframe = document.createElement('iframe');
+      iframe.src = src;
+      iframe.allow = 'autoplay; fullscreen';
+      iframe.setAttribute('referrerpolicy','no-referrer');
+      frameWrap.appendChild(iframe);
+      player.style.display='block';
+      return iframe;
+    }
+
+    document.getElementById('loadBtn').addEventListener('click', ()=>{
+      const input = document.getElementById('videoSrc').value || '';
+      const src = tryExtractSrc(input);
+      const dbg = document.getElementById('debug');
+      if(!src){
+        alert('无法识别的视频链接或 ID，请确认输入为 Bilibili 链接、BV号、av号，或 iframe 嵌入代码。');
+        if(dbg) { dbg.style.display='block'; dbg.textContent = '解析失败：' + input; }
+        return;
+      }
+      if(dbg){ dbg.style.display='block'; dbg.textContent = '播放器 src: ' + src; }
+      loadPlayer(src);
+    });
+
+    document.getElementById('clearBtn').addEventListener('click', ()=>{
+      document.getElementById('videoSrc').value = '';
+      document.getElementById('debug').style.display='none';
+      loadPlayer(null);
+    });
+
+    document.getElementById('openInNew').addEventListener('click', ()=>{
+      const input = document.getElementById('videoSrc').value || '';
+      const src = tryExtractSrc(input);
+      if(!src){ alert('请先输入有效的视频链接或ID'); return; }
+      window.open(src, '_blank');
+    });
+
+    document.getElementById('exitBtn')?.addEventListener('click', ()=>{
+      try{ history.back(); }catch(e){ window.location.href = '../../index.html'; }
+    });
+
+    // auto-load if query param present: ?src=...
+    try{
+      const p = new URLSearchParams(window.location.search);
+      const pre = p.get('src') || p.get('bvid') || p.get('aid');
+      if(pre){
+        // if bvid or aid param provided, build URL accordingly
+        if(p.get('bvid')){
+          const src = 'https://player.bilibili.com/player.html?bvid=' + encodeURIComponent(p.get('bvid')) + '&page=1';
+          document.getElementById('videoSrc').value = 'BV...' + p.get('bvid');
+          loadPlayer(src);
+        }else if(p.get('aid')){
+          const src = 'https://player.bilibili.com/player.html?aid=' + encodeURIComponent(p.get('aid')) + '&page=1';
+          document.getElementById('videoSrc').value = 'av' + p.get('aid');
+          loadPlayer(src);
+        }else{
+          document.getElementById('videoSrc').value = pre;
+          const src = tryExtractSrc(pre);
+          if(src) loadPlayer(src);
+        }
+      }
+    }catch(e){/* ignore */}
+  </script>
+</body>
+</html>
